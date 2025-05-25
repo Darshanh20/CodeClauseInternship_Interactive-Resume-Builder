@@ -1,0 +1,116 @@
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function Template1({ resume, skills, education, experience, certifications, links }) {
+    const resumeRef = useRef();
+    const navigate = useNavigate();
+
+    const handleEdit = () => {
+        navigate(`/intropage?resumeId=${resume.id}`);
+    };
+
+    return (
+        <div className="p-6 bg-gray-100 min-h-screen">
+            <div ref={resumeRef}>
+                <div className="max-w-3xl mx-auto my-8 bg-white p-10 shadow-lg rounded-lg text-gray-800 font-sans flex">
+                    <div className="flex flex-col gap-10 bg-amber-300 p-3 rounded-2xl">
+                        {/* Header */}
+                        <div className="flex flex-col gap-10">
+                            <h1 className="text-3xl font-bold max-w-3xs">{resume.full_name}</h1>
+                            <div>
+                                <h1 className="font-bold text-xl border-b">Contact</h1>
+                                <p className="text-sm text-gray-600 mt-1">{resume.phone}</p>
+                                <p className="text-sm text-gray-600 mt-1">{resume.email}</p>
+                            </div>
+                        </div>
+
+                        {/* Education */}
+                        <section className="mb-6">
+                            <h2 className="text-xl text-gray-700 pb-1 mb-2 font-bold border-b">Education</h2>
+                            {education.map((edu, i) => (
+                                <div key={i} className="mb-3">
+                                    <p className="font-mono">{edu.institution}</p>
+                                    <p className="text-sm text-gray-600 font-sans">
+                                        {new Date(edu.from_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} –{' '}
+                                        {new Date(edu.to_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            ))}
+                        </section>
+
+                        {/* Links */}
+                        <section>
+                            <h2 className="text-xl font-bold text-gray-700 pb-1 mb-2 border-b">Links</h2>
+                            <ul className="list-disc list-inside text-sm">
+                                {links.map((l, i) => (
+                                    <li key={i} className="flex flex-col">
+                                        <span className="font-medium">{l.label}:</span>{' '}
+                                        <a href={l.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                                            {l.url}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    </div>
+
+                    <div className="m-10">
+                        {/* Summary */}
+                        <section className="mb-6">
+                            <h2 className="text-xl font-bold text-gray-700 border-b pb-1 mb-2">Professional Summary</h2>
+                            <p className="text-sm leading-relaxed">{resume.summary}</p>
+                        </section>
+
+                        {/* Skills */}
+                        <section className="mb-6">
+                            <h2 className="text-xl font-bold text-gray-700 border-b pb-1 mb-2">Skills</h2>
+                            <ul className="flex flex-wrap gap-2 text-sm">
+                                {skills.map((s, i) => (
+                                    <li key={i} className="bg-gray-100 px-3 py-1 rounded-full">{s.name}</li>
+                                ))}
+                            </ul>
+                        </section>
+
+                        {/* Experience */}
+                        <section className="mb-6">
+                            <h2 className="text-xl font-bold text-gray-700 border-b pb-1 mb-2">Experience</h2>
+                            <section className="my-4">
+                                {experience.map((exp, index) => (
+                                    <div key={index} className="mb-4">
+                                        <h3 className="text-lg font-medium">
+                                            {exp.role} at {exp.company}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            {exp.from_date} – {exp.currently_working ? 'Present' : exp.to_date}
+                                        </p>
+                                        {exp.description && (
+                                            <p className="text-gray-800 text-sm">{exp.description}</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </section>
+                        </section>
+
+                        {/* Certifications */}
+                        <section className="mb-6">
+                            <h2 className="text-xl font-bold text-gray-700 border-b pb-1 mb-2">Certifications</h2>
+                            <ul className="list-disc list-inside text-sm">
+                                {certifications.map((c, i) => (
+                                    <li key={i}>{c.title}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div className='flex justify-center'>
+                <button
+                    onClick={handleEdit}
+                    className=" bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl cursor-pointer mb-4"
+                >
+                    Edit Resume
+                </button>
+            </div>
+        </div>
+    );
+}
