@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 export default function Template1({ resume, skills, education, experience, certifications, links }) {
     const resumeRef = useRef();
@@ -8,10 +10,40 @@ export default function Template1({ resume, skills, education, experience, certi
     const handleEdit = () => {
         navigate(`/intropage?resumeId=${resume.id}`);
     };
+    const handleDownload = async () => {
+        if (!resumeRef.current) return;
+
+        try {
+            // Hide buttons and other elements you don't want in the image
+            const originalStyles = {
+                overflow: resumeRef.current.style.overflow,
+            };
+            resumeRef.current.style.overflow = 'visible';
+
+            const dataUrl = await htmlToImage.toPng(resumeRef.current, {
+                quality: 1,
+                pixelRatio: 2, // Higher resolution
+                backgroundColor: '#ffffff',
+                style: {
+                    transform: 'none', // Disable any transforms
+                }
+            });
+
+            const link = document.createElement('a');
+            link.download = `${resume.full_name}-resume.png`;
+            link.href = dataUrl;
+            link.click();
+
+            // Restore original styles
+            resumeRef.current.style.overflow = originalStyles.overflow;
+        } catch (error) {
+            console.error('Error generating image', error);
+        }
+    };
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <div ref={resumeRef}>
+            <div ref={resumeRef} className="resume-container">
                 <div className="max-w-3xl mx-auto my-8 bg-white p-10 shadow-lg rounded-lg text-gray-800 font-sans flex">
                     <div className="flex flex-col gap-10 bg-amber-300 p-3 rounded-2xl">
                         {/* Header */}
@@ -103,12 +135,18 @@ export default function Template1({ resume, skills, education, experience, certi
                     </div>
                 </div>
             </div>
-            <div className='flex justify-center'>
+            <div className='flex justify-center gap-3'>
                 <button
                     onClick={handleEdit}
                     className=" bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl cursor-pointer mb-4"
                 >
                     Edit Resume
+                </button>
+                <button
+                    onClick={handleDownload}
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer mb-4"
+                >
+                    Download as Image
                 </button>
             </div>
         </div>
