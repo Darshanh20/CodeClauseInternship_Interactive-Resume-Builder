@@ -1,2 +1,21 @@
 @import "tailwindcss";
 
+@media screen and (max-width: 768px) {
+  .resume-container {
+    zoom: 0.6; 
+  }
+}
+
+@media print {
+  body, html {
+    width: 210mm;
+    height: 297mm;
+  }
+  .resume-container {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}
