@@ -134,45 +134,119 @@ export default function Form() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 text-white">
       <div className="bg-gray-100 p-2 text-black">{userEmail}</div>
-      <input type="text" name="full_name" placeholder="Full Name" value={formData.full_name} onChange={handleFormChange} className="border p-2 w-full" />
-      <input type="text" name="phone" placeholder="Phone" value={formData.phone} onChange={handleFormChange} className="border p-2 w-full" />
-      <textarea name="summary" placeholder="Professional Summary(max 250 words)" value={formData.summary} onChange={handleFormChange} className="border p-2 w-full" maxLength={1800} />
+
+      <input
+        type="text"
+        name="full_name"
+        placeholder="Full Name"
+        value={formData.full_name}
+        onChange={handleFormChange}
+        required
+        className="border p-2 w-full"
+      />
+
+      <input
+        type="text"
+        name="phone"
+        placeholder="Phone"
+        value={formData.phone}
+        onChange={handleFormChange}
+        required
+        className="border p-2 w-full"
+      />
+
+      <textarea
+        name="summary"
+        placeholder="Professional Summary (max 250 words)"
+        value={formData.summary}
+        onChange={handleFormChange}
+        maxLength={1800}
+        required
+        className="border p-2 w-full"
+      />
 
       {/* Skills */}
       <div>
         <label className="font-semibold">Skills</label>
         {skills.map((skill, idx) => (
-          <input key={idx} value={skill} onChange={e => {
-            const newSkills = [...skills]; newSkills[idx] = e.target.value; setSkills(newSkills)
-          }} placeholder="Skill" className="border p-2 w-full my-1" />
+          <input
+            key={idx}
+            value={skill}
+            onChange={e => {
+              const newSkills = [...skills]
+              newSkills[idx] = e.target.value
+              setSkills(newSkills)
+            }}
+            required={idx === 0}
+            placeholder="Skill"
+            className="border p-2 w-full my-1"
+          />
         ))}
-        <button type="button" onClick={() => setSkills([...skills, ''])} className="text-blue-600 text-sm">+ Add Skill</button>
+        <button type="button" onClick={() => setSkills([...skills, ''])} className="text-blue-600 text-sm cursor-pointer hover:text-blue-500">
+          + Add Skill
+        </button>
       </div>
 
       {/* Education */}
       <div>
         <label className="font-semibold">Education</label>
         {education.map((ed, idx) => (
-          <div key={idx} className="grid grid-cols-3 gap-2 my-1">
-            <input placeholder="Institution" value={ed.institution} onChange={e => {
-              const newEd = [...education]; newEd[idx].institution = e.target.value; setEducation(newEd)
-            }} className="border p-2" />
-            <input type="date" value={ed.from} onChange={e => {
-              const newEd = [...education]; newEd[idx].from = e.target.value; setEducation(newEd)
-            }} className="border p-2" />
-            <input type="date" value={ed.to} onChange={e => {
-              const newEd = [...education]; newEd[idx].to = e.target.value; setEducation(newEd)
-            }} className="border p-2" />
+          <div key={idx} className="my-2 space-y-2">
+            <input
+              placeholder="Institution"
+              value={ed.institution}
+              onChange={e => {
+                const newEd = [...education]
+                newEd[idx].institution = e.target.value
+                setEducation(newEd)
+              }}
+              required={idx === 0}
+              className="border p-2 w-full"
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label className="text-sm">From</label>
+                <input
+                  type="date"
+                  value={ed.from}
+                  onChange={e => {
+                    const newEd = [...education]
+                    newEd[idx].from = e.target.value
+                    setEducation(newEd)
+                  }}
+                  required={idx === 0}
+                  className="border p-2 w-full"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm">To</label>
+                <input
+                  type="date"
+                  value={ed.to}
+                  onChange={e => {
+                    const newEd = [...education]
+                    newEd[idx].to = e.target.value
+                    setEducation(newEd)
+                  }}
+                  required={idx === 0}
+                  className="border p-2 w-full"
+                />
+              </div>
+            </div>
           </div>
         ))}
-        <button type="button" onClick={() => setEducation([...education, { institution: '', from: '', to: '' }])} className="text-blue-600 text-sm">+ Add Education</button>
+        <button type="button" onClick={() => setEducation([...education, { institution: '', from: '', to: '' }])} className="text-blue-600 text-sm cursor-pointer hover:text-blue-500">
+          + Add Education
+        </button>
       </div>
 
       {/* Experience */}
       <div>
         <label className="font-semibold">Experience</label>
         {experience.map((exp, idx) => (
-          <div key={idx} className="border p-2 my-2 rounded">
+          <div key={idx} className="border p-2 my-2 rounded space-y-2">
             <input
               placeholder="Company"
               value={exp.company}
@@ -181,7 +255,7 @@ export default function Form() {
                 newExp[idx].company = e.target.value
                 setExperience(newExp)
               }}
-              className="border p-2 w-full my-1"
+              className="border p-2 w-full"
             />
 
             <input
@@ -192,7 +266,7 @@ export default function Form() {
                 newExp[idx].role = e.target.value
                 setExperience(newExp)
               }}
-              className="border p-2 w-full my-1"
+              className="border p-2 w-full"
             />
 
             <textarea
@@ -203,32 +277,39 @@ export default function Form() {
                 newExp[idx].description = e.target.value
                 setExperience(newExp)
               }}
-              className="border p-2 w-full my-1"
+              className="border p-2 w-full"
               maxLength={700}
             />
 
-            <div className="grid grid-cols-2 gap-2 my-1">
-              <input
-                type="date"
-                value={exp.from}
-                onChange={e => {
-                  const newExp = [...experience]
-                  newExp[idx].from = e.target.value
-                  setExperience(newExp)
-                }}
-                className="border p-2"
-              />
-              {!exp.currentlyWorking && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label className="text-sm">From</label>
                 <input
                   type="date"
-                  value={exp.to}
+                  value={exp.from}
                   onChange={e => {
                     const newExp = [...experience]
-                    newExp[idx].to = e.target.value
+                    newExp[idx].from = e.target.value
                     setExperience(newExp)
                   }}
-                  className="border p-2"
+                  className="border p-2 w-full"
                 />
+              </div>
+
+              {!exp.currentlyWorking && (
+                <div>
+                  <label className="text-sm">To</label>
+                  <input
+                    type="date"
+                    value={exp.to}
+                    onChange={e => {
+                      const newExp = [...experience]
+                      newExp[idx].to = e.target.value
+                      setExperience(newExp)
+                    }}
+                    className="border p-2 w-full"
+                  />
+                </div>
               )}
             </div>
 
@@ -239,7 +320,7 @@ export default function Form() {
                 onChange={e => {
                   const newExp = [...experience]
                   newExp[idx].currentlyWorking = e.target.checked
-                  if (e.target.checked) newExp[idx].to = '' // clear end date if currently working
+                  if (e.target.checked) newExp[idx].to = ''
                   setExperience(newExp)
                 }}
               />
@@ -250,45 +331,83 @@ export default function Form() {
         <button
           type="button"
           onClick={() =>
-            setExperience([...experience, {
-              company: '', role: '', from: '', to: '', description: '', currentlyWorking: false
-            }])
+            setExperience([
+              ...experience,
+              {
+                company: '',
+                role: '',
+                from: '',
+                to: '',
+                description: '',
+                currentlyWorking: false
+              }
+            ])
           }
-          className="text-blue-600 text-sm mt-2"
+          className="text-blue-600 text-sm mt-2 cursor-pointer hover:text-blue-500"
         >
           + Add Experience
         </button>
       </div>
 
-
       {/* Certifications */}
       <div>
         <label className="font-semibold">Certifications</label>
         {certifications.map((cert, idx) => (
-          <input key={idx} value={cert} onChange={e => {
-            const newCert = [...certifications]; newCert[idx] = e.target.value; setCertifications(newCert)
-          }} placeholder="Certification" className="border p-2 w-full my-1" />
+          <input
+            key={idx}
+            value={cert}
+            onChange={e => {
+              const newCert = [...certifications]
+              newCert[idx] = e.target.value
+              setCertifications(newCert)
+            }}
+            placeholder="Certification"
+            className="border p-2 w-full my-1"
+          />
         ))}
-        <button type="button" onClick={() => setCertifications([...certifications, ''])} className="text-blue-600 text-sm">+ Add Certification</button>
+        <button type="button" onClick={() => setCertifications([...certifications, ''])} className="text-blue-600 text-sm cursor-pointer hover:text-blue-500">
+          + Add Certification
+        </button>
       </div>
 
       {/* Links */}
       <div>
         <label className="font-semibold">Links</label>
         {links.map((link, idx) => (
-          <div key={idx} className="grid grid-cols-2 gap-2 my-1">
-            <input placeholder="Label (e.g. GitHub)" value={link.label} onChange={e => {
-              const newLinks = [...links]; newLinks[idx].label = e.target.value; setLinks(newLinks)
-            }} className="border p-2" />
-            <input placeholder="URL" value={link.url} onChange={e => {
-              const newLinks = [...links]; newLinks[idx].url = e.target.value; setLinks(newLinks)
-            }} className="border p-2" />
+          <div key={idx} className="grid grid-cols-1 sm:grid-cols-2 gap-2 my-1">
+            <input
+              placeholder="Label (e.g. GitHub)"
+              value={link.label}
+              onChange={e => {
+                const newLinks = [...links]
+                newLinks[idx].label = e.target.value
+                setLinks(newLinks)
+              }}
+              required={idx === 0}
+              className="border p-2"
+            />
+            <input
+              placeholder="URL"
+              value={link.url}
+              onChange={e => {
+                const newLinks = [...links]
+                newLinks[idx].url = e.target.value
+                setLinks(newLinks)
+              }}
+              required={idx === 0}
+              className="border p-2"
+            />
           </div>
         ))}
-        <button type="button" onClick={() => setLinks([...links, { label: '', url: '' }])} className="text-blue-600 text-sm">+ Add Link</button>
+        <button type="button" onClick={() => setLinks([...links, { label: '', url: '' }])} className="text-blue-600 text-sm cursor-pointer hover:text-blue-500">
+          + Add Link
+        </button>
       </div>
 
-      <button type="submit" className='cursor-pointer w-full bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl text-white transition'>Save Resume</button>
+      <button type="submit" className="cursor-pointer w-full bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl text-white transition">
+        Save Resume
+      </button>
     </form>
+
   )
 }

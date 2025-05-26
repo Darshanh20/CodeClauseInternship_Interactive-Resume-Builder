@@ -29,7 +29,7 @@ export default function Login() {
                     <input type="email" placeholder="Email" className="p-2 border" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" className="p-2 border" value={password} onChange={(e) => setPassword(e.target.value)} />
                     {error && <p className="text-red-500">{error}</p>}
-                    <button className="bg-blue-500 text-white p-2">Login</button>
+                    <button className="bg-blue-500 hover:bg-blue-600 transition text-white p-2 cursor-pointer">Login</button>
                 </form>
                 <p className="mt-4 text-center">
                     Not signed up?{' '}

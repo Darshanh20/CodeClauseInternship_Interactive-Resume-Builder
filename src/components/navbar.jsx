@@ -48,21 +48,21 @@ export default function Navbar() {
 
     return (
         <div className="p-4 flex justify-between items-center bg-gray-900 shadow-md border-gray-800">
-            <div className="flex flex-col items-center text-left cursor-pointer" onClick={handleTitleClick}
+            <div className="flex flex-col text-left cursor-pointer" onClick={handleTitleClick}
                 title="Go to Intro Page">
-                <div className="text-4xl font-sans font-bold text-[rgb(59,130,246)]">BRIEF</div>
-                <div className="text-base text-[rgb(143,180,238)]">The Ultimate Resume Builder</div>
+                <div className="text-2xl md:text-4xl font-sans font-bold text-[rgb(59,130,246)]">BRIEF</div>
+                <div className="text-sm md:text-base text-[rgb(143,180,238)]">The Ultimate Resume Builder</div>
             </div>
             <div>
                 <button
-                    className="font-semibold p-2 rounded-2xl cursor-pointer hover:bg-gray-200 hover:text-black transition text-[rgb(59,130,246)]"
+                    className="font-semibold p-2 m-2 rounded-2xl cursor-pointer hover:bg-gray-200 hover:text-black transition text-[rgb(59,130,246)]"
                     onClick={handleViewTemplates} title='View Different Templates'
                 >
                     View Templates
                 </button>
             </div>
             <div className="flex flex-col gap-0.5">
-                <span className="font-semibold text-[rgb(59,130,246)] text-2xl">{fullName || 'Guest User'}</span>
+                <span className="font-semibold text-[rgb(59,130,246)] text-xl md:text-2xl">{fullName || 'Guest User'}</span>
                 <button
                     onClick={handleLogout}
                     className="text-sm text-red-600 hover:underline flex items-center gap-1 cursor-pointer"
