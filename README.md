@@ -21,7 +21,6 @@ Develop an interactive resume builder tool.
 - Interactive form to enter personal, educational, and professional information
 - Real-time preview of resume templates
 - Template selection for customizable styles
-- Resume export/download as PDF
 - Secure user authentication via Supabase
 
 ---
@@ -41,32 +40,12 @@ Develop an interactive resume builder tool.
 
 Create a `.env` file in the root directory and add the following variables:
 
-```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_anon_key
 
-## Folder Structure
-brief-resume-builder/
-├── components/                # Reusable UI components
-│   ├── ResumeForm.jsx         # Input form for user details
-│   ├── TemplateSelector.jsx   # UI for selecting resume templates
-│   └── PDFDownload.jsx        # Component to export/download the resume
-├── pages/                     # Main app pages
-│   ├── IntroFormPage.jsx      # Form input page
-│   ├── TemplatePage.jsx       # Preview and template selector page
-│   └── DownloadPage.jsx       # Final export/download screen
-├── templates/                 # Resume templates (design components)
-│   └── Template1.jsx          # Example resume layout
-├── App.jsx                    # Main React app file with routes
-├── supabase.js                # Supabase client setup
-├── tailwind.config.js         # Tailwind CSS config
-├── index.css                  # Global styles
-├── main.jsx                   # Entry point
-└── .env                       # Environment variables (not committed)
+## ⚙️ Scripts
 
-⚙️ Scripts
-npm install        # Install dependencies
-npm run dev        # Start development server
-npm run build      # Build for production
+- `npm install` – Install all dependencies
+- `npm run dev` – Start development server
 
 Developed by Darshan Hotchandani
