@@ -32,7 +32,6 @@ Develop an interactive resume builder tool.
 - **Supabase** – Backend for authentication and database
 - **React Router** – For multi-page navigation
 - **React Hook Form / Zod (if used)** – Form validation and management
-- **html2pdf / react-to-print / jsPDF (if used)** – Resume PDF generation
 
 ---
 
