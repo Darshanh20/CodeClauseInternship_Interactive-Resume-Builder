@@ -47,4 +47,64 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 - `npm install` – Install all dependencies
 - `npm run dev` – Start development server
 
+
+## SQL TABLES
+create table users (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text not null,
+  full_name text,
+  created_at timestamp with time zone default now()
+);
+
+create table resumes (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references auth.users(id) on delete cascade,
+  full_name text,
+  phone text,
+  summary text,
+  education text,
+  experience text,
+  created_at timestamp with time zone default current_timestamp
+);
+
+create table skills (
+  id uuid primary key default uuid_generate_v4(),
+  resume_id uuid references resumes(id) on delete cascade,
+  name text
+);
+
+create table education (
+  id uuid primary key default uuid_generate_v4(),
+  resume_id uuid references resumes(id) on delete cascade,
+  institution text,
+  from_date date,
+  to_date date
+);
+
+create table experience (
+  id uuid primary key default uuid_generate_v4(),
+  resume_id uuid references resumes(id) on delete cascade,
+  company text,
+  from_date date,
+  to_date date,
+  role text
+);
+
+create table certifications (
+  id uuid primary key default uuid_generate_v4(),
+  resume_id uuid references resumes(id) on delete cascade,
+  title text
+);
+
+create table links (
+  id uuid primary key default uuid_generate_v4(),
+  resume_id uuid references resumes(id) on delete cascade,
+  label text,
+  url text
+);
+
+alter table experience add column description text;
+alter table experience add column currently_working boolean default false;
+
+
 Developed by Darshan Hotchandani
