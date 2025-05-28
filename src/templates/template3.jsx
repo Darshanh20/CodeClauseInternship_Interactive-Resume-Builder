@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { jsPDF } from "jspdf";
 
 export default function Template3({ resume, skills, education, experience, certifications, links }) {
     const resumeRef = useRef();
@@ -11,33 +11,33 @@ export default function Template3({ resume, skills, education, experience, certi
         navigate(`/intropage?resumeId=${resume.id}`);
     };
     const handleDownload = async () => {
-        if (!resumeRef.current) return;
+        const element = resumeRef.current;
+
+        const originalWidth = element.offsetWidth;
+        element.style.width = '794px'; 
 
         try {
-            // Hide buttons and other elements you don't want in the image
-            const originalStyles = {
-                overflow: resumeRef.current.style.overflow,
-            };
-            resumeRef.current.style.overflow = 'visible';
-
-            const dataUrl = await htmlToImage.toPng(resumeRef.current, {
+            const dataUrl = await htmlToImage.toPng(element, {
                 quality: 1,
-                pixelRatio: 2, // Higher resolution
-                backgroundColor: '#ffffff',
-                style: {
-                    transform: 'none', // Disable any transforms
-                }
+                pixelRatio: 2
             });
 
-            const link = document.createElement('a');
-            link.download = `${resume.full_name}-resume.png`;
-            link.href = dataUrl;
-            link.click();
+            element.style.width = `${originalWidth}px`;
 
-            // Restore original styles
-            resumeRef.current.style.overflow = originalStyles.overflow;
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "px",
+                format: "a4",
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pageWidth, pageHeight);
+            pdf.save('resume.pdf');
         } catch (error) {
-            console.error('Error generating image', error);
+            console.error('Error generating PDF:', error);
+            element.style.width = `${originalWidth}px`;
         }
     };
 
@@ -131,7 +131,7 @@ export default function Template3({ resume, skills, education, experience, certi
                     onClick={handleDownload}
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer mb-4"
                 >
-                    Download as Image
+                    Download as PDF
                 </button>
             </div>
         </div>

@@ -1,64 +1,51 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { jsPDF } from "jspdf";
+
 
 export default function Template1({ resume, skills, education, experience, certifications, links }) {
-    const resumeRef = useRef();
+    const resumeRef = useRef(null);
     const navigate = useNavigate();
 
     const handleEdit = () => {
         navigate(`/intropage?resumeId=${resume.id}`);
     };
     const handleDownload = async () => {
-        if (!resumeRef.current) return;
+        const element = resumeRef.current;
+
+        const originalWidth = element.offsetWidth;
+        element.style.width = '794px';
 
         try {
-            // Store original styles to restore later
-            const originalStyles = {
-                width: resumeRef.current.style.width,
-                height: resumeRef.current.style.height,
-                transform: resumeRef.current.style.transform,
-            };
-
-            // Force A4 size (in pixels at 96dpi)
-            const a4Width = 794; // 210mm in pixels (210 * 96 / 25.4)
-            const a4Height = 1123; // 297mm in pixels (297 * 96 / 25.4)
-
-            // Temporarily set pixel dimensions
-            resumeRef.current.style.width = `${a4Width}px`;
-            resumeRef.current.style.height = `${a4Height}px`;
-
-            // Generate the image with higher quality
-            const dataUrl = await htmlToImage.toPng(resumeRef.current, {
+            const dataUrl = await htmlToImage.toPng(element, {
                 quality: 1,
-                pixelRatio: 3, // Higher resolution
-                backgroundColor: '#ffffff',
+                pixelRatio: 2
             });
 
-            // Create download link
-            const link = document.createElement('a');
-            link.download = `${resume.full_name}-resume.png`;
-            link.href = dataUrl;
-            link.click();
+            element.style.width = `${originalWidth}px`;
 
-            // Restore original styles
-            resumeRef.current.style.width = originalStyles.width;
-            resumeRef.current.style.height = originalStyles.height;
-            resumeRef.current.style.transform = originalStyles.transform;
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "px",
+                format: "a4",
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pageWidth, pageHeight);
+            pdf.save('resume.pdf');
         } catch (error) {
-            console.error('Error generating image', error);
+            console.error('Error generating PDF:', error);
+            element.style.width = `${originalWidth}px`;
         }
     };
 
+
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <div ref={resumeRef} className="resume-container" style={{
-                width: '210mm', // A4 width
-                height: '297mm', // A4 height
-                margin: '0 auto', // Center the resume
-                overflow: 'hidden', // Prevent content from overflowing
-            }}>
+            <div ref={resumeRef} className="resume-container">
                 <div className="max-w-3xl mx-auto my-8 bg-white p-10 shadow-lg rounded-lg text-gray-800 font-sans flex">
                     <div className="flex flex-col gap-10 bg-amber-300 p-3 rounded-2xl">
                         {/* Header */}
@@ -161,7 +148,7 @@ export default function Template1({ resume, skills, education, experience, certi
                     onClick={handleDownload}
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer mb-4"
                 >
-                    Download as Image
+                    Download as PDF
                 </button>
             </div>
         </div>
