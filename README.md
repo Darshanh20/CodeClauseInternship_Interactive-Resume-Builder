@@ -22,6 +22,7 @@ Develop an interactive resume builder tool.
 - Real-time preview of resume templates
 - Template selection for customizable styles
 - Secure user authentication via Supabase
+- Exporting of resume as PDF
 
 ---
 
